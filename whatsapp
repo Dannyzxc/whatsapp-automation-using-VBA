@@ -1,0 +1,76 @@
+Sub WebWhatsApp()
+
+'Activate Selenium Type Library : Tools > References
+
+Dim bot As New WebDriver
+Dim ks As New Keys
+
+'Init New Chrome instance & navigate to WebWhatsApp
+bot.Start "chrome", "https://web.whatsapp.com/"
+
+bot.Get "/"
+'Ask user to scan the QR code. Once logged in, continue with
+
+MsgBox "Please scan the QR code. After you are logged in, please confirm this message box by clicking yes"
+
+'determinate number of messages by identifying the number of last rows in  column A
+lastrow = Cells(Rows.Count, 1).End(xlUp).Row
+
+'Search phonenumber /name , press enter, paste text into WebwhatsApp, press Enter to send message
+
+For i = 2 To lastrow
+    'Get search text (phone number or name) from worksheet
+    searchtext = Sheets(1).Range("A" & i).Value
+    
+    'get textmessage from worksheet
+    textmessage = Sheets(1).Range("B" & i).Value
+    
+    'click in searchbox
+    
+    bot.FindElementByXPath("//*[@id='side']/div[1]/div/div/div[2]/div/div[2]").Click
+    
+    'Wait 500ms
+    bot.Wait (1000)
+    
+    'insert search text (phone number or name)
+    
+    
+    bot.SendKeys (searchtext)
+    
+    'press Enter to confirm search text
+    
+    'wait 500 ms
+    bot.Wait (1000)
+    
+    'press Enter to confirm search text
+    bot.SendKeys (ks.Enter)
+    
+    'wait 500 ms
+    bot.Wait (1000)
+    
+    'load message into WebWhatsApp
+    bot.SendKeys (textmessage)
+    
+    
+    'wait 500 ms
+    bot.Wait (1000)
+    
+    'press enter to send the message
+    bot.SendKeys (ks.Enter)
+       
+    
+    
+Next i
+
+'get notification once done
+
+MsgBox "Done :)"
+
+
+# stop
+
+End Sub
+
+
+
+# end save it as file name .xlsm
